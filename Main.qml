@@ -1,9 +1,7 @@
-import QtQuick 2.5
-import QtQuick.Layouts 1.2
-import QtQuick.Controls 1.4 as Qqc
-import QtQuick.Controls.Styles 1.4
-import QtQuick.Window 2.2
-import QtMultimedia 5.5
+import QtQuick 2.15
+import QtQuick.Layouts 1.15
+import QtQuick.Window 2.15
+import QtMultimedia
 import SddmComponents 2.0
 
 Rectangle {
@@ -32,6 +30,7 @@ Rectangle {
 	ColumnLayout {
 		width: parent.width
 		height: parent.height
+		spacing: 0
 		AnimatedImage{
 			Layout.alignment: Qt.AlignCenter
 			Layout.topMargin: 2
@@ -45,69 +44,86 @@ Rectangle {
 			height: 50
 			source: "whoIsUser.gif"
 		}
-		Qqc.Label {
+		Text {
 			Layout.alignment: Qt.AlignCenter
 			text: "Ｕｓｅｒ ＩD:"
 			color: "#c1b492"
 			font.pixelSize: 16
 		}
-		Qqc.TextField {
-			id: username
+		Rectangle {
 			Layout.alignment: Qt.AlignCenter
-			text: userModel.lastUser
-			style: TextFieldStyle {
-				textColor: "#c1b492"
-				background: Rectangle {
-					color: "#000"
-					implicitWidth: 200
-					border.color: "#d2738a"
-				}
-			}
-			KeyNavigation.backtab: shutdownBtn; KeyNavigation.tab: password
-			Keys.onPressed: {
-				if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-					sddm.login(username.text, password.text, session.index)
-					event.accepted = true
+			implicitWidth: 200
+			implicitHeight: 34
+			color: "#000"
+			border.color: "#d2738a"
+			border.width: 1
+
+			TextInput {
+				id: username
+				anchors.fill: parent
+				anchors.margins: 8
+				color: "#c1b492"
+				font.pixelSize: 14
+				selectionColor: "#d2738a"
+				selectedTextColor: "black"
+				text: userModel.lastUser
+				verticalAlignment: TextInput.AlignVCenter
+				KeyNavigation.backtab: shutdownBtn
+				KeyNavigation.tab: password
+				Keys.onPressed: {
+					if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+						sddm.login(username.text, password.text, session.index)
+						event.accepted = true
+					}
 				}
 			}
 		}
-		Qqc.Label {
+		Text {
 			Layout.alignment: Qt.AlignCenter
 			text: "Ｐａｓｓｗｏｒｄ："
 			color: "#c1b492"
 			font.pixelSize: 16
 		}
-		Qqc.TextField {
-			id: password
-			echoMode: TextInput.Password
+		Rectangle {
 			Layout.alignment: Qt.AlignCenter
-			style: TextFieldStyle {
-				textColor: "#c1b492"
-				background: Rectangle {
-					color: "#000"
-					implicitWidth: 200
-					border.color: "#d2738a"
-				}
-			}
-			KeyNavigation.backtab: username; KeyNavigation.tab: session
-			Keys.onPressed: {
-				if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-					sddm.login(username.text, password.text, session.index)
-					event.accepted = true
+			implicitWidth: 200
+			implicitHeight: 34
+			color: "#000"
+			border.color: "#d2738a"
+			border.width: 1
+
+			TextInput {
+				id: password
+				anchors.fill: parent
+				anchors.margins: 8
+				echoMode: TextInput.Password
+				color: "#c1b492"
+				font.pixelSize: 14
+				selectionColor: "#d2738a"
+				selectedTextColor: "black"
+				verticalAlignment: TextInput.AlignVCenter
+				KeyNavigation.backtab: username
+				KeyNavigation.tab: session
+				Keys.onPressed: {
+					if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+						sddm.login(username.text, password.text, session.index)
+						event.accepted = true
+					}
 				}
 			}
 		}
-		ColumnLayout {
+		Item {
 			Layout.alignment: Qt.AlignCenter
 			Layout.topMargin: 4
 			Layout.bottomMargin: 50
 			width: 200
+			height: 38
 			Rectangle {
 				anchors.fill: parent
 				color: "#d2738a"
 			}
-			Qqc.Label {
-				Layout.alignment: Qt.AlignCenter
+			Text {
+				anchors.centerIn: parent
 				text: "Ｌｏｇｉｎ"
 				color: "#c1b492"
 				font.pixelSize: 20
@@ -181,20 +197,35 @@ Rectangle {
 		arrowIcon: "angle-down.png"
 		KeyNavigation.backtab: password; KeyNavigation.tab: rebootBtn;
 	}
-	Audio {
+	AudioOutput {
+		id: bgMusicOutput
+		volume: 1.0
+	}
+	MediaPlayer {
 		id: bgMusic
 		source: "bg_music.wav"
-		autoPlay: true
-		loops: Audio.Infinite
+		audioOutput: bgMusicOutput
+		loops: MediaPlayer.Infinite
+		Component.onCompleted: play()
 	}
-	Audio {
+	AudioOutput {
+		id: welcomeOutput
+		volume: 1.0
+	}
+	MediaPlayer {
 		id: welcome
 		source: "welcome.wav"
-		autoPlay: true
+		audioOutput: welcomeOutput
+		Component.onCompleted: play()
 	}
-	Audio {
+	AudioOutput {
+		id: deniedOutput
+		volume: 1.0
+	}
+	MediaPlayer {
 		id: denied
 		source: "denied.wav"
+		audioOutput: deniedOutput
 	}
 
 	Component.onCompleted: {
@@ -205,4 +236,3 @@ Rectangle {
 		}
 	}
 }
-

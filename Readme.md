@@ -8,6 +8,10 @@ Original version can be found [here](https://gitlab.com/mixedCase/sddm-lain-wire
 
 This one contains changes that I made for my 1366*786 screen.
 
+## Qt6 / modern SDDM compatibility
+
+This theme has been ported away from **QtQuick Controls 1.4** so it works with modern SDDM greeters that run on **Qt6** (including Bazzite defaults).
+
 # In action :-
 You can watch the preview video [here.](https://youtu.be/M-p7cHx4OM0)
 
@@ -26,7 +30,8 @@ makepkg -Ccsi
 
 **Other GNU/Linux distros**
 - Make sure you have sddm installed and configured as your default login manager.
-- Install the dependencies ```qt5-multimedia``` & ```qt5-quickcontrols``` using your package manager.
+- Install SDDM with Qt6 support and Qt multimedia runtime packages using your distro package manager (for example, `sddm` + Qt6 multimedia packages).
+- No QtQuick Controls 1.x package is required anymore.
 - Wav audio codecs are needed to play the sound, make sure you have package(s) that fulfill that installed. 
 - Download the [latest release](https://github.com/lll2yu/sddm-lain-wired-theme/releases/latest)
 - Decompress the `*.zip` or `*.tar.gz` file or run `git clone https://github.com/lll2yu/sddm-lain-wired-theme`
